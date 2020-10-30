@@ -16,4 +16,9 @@ Question 3
 		class than the one its called in
 
 Question 4
-
+	jenkins.model.IdStrategy, repeated code
+	Eliminate repeated code by creating a new method which runs the code, and then 
+		call the method rather than repeating the code
+		However, the breaks stop that, as it needs to break a different loop
+		Instead, a for loop with a condition to ensure it hasn't reached any
+		of the breaks in the if statement. 
