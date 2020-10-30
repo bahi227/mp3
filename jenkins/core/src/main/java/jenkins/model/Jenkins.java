@@ -310,6 +310,12 @@ public class Jenkins extends AbstractCIBase implements DirectlyModifiableTopLeve
         ModelObjectWithContextMenu, ModelObjectWithChildren {
     private transient final Queue queue;
 
+    
+    private void updateAndTrim() {
+		updateComputerList();
+		trimLabels();
+	}
+    
     /**
      * Stores various objects scoped to {@link Jenkins}.
      */

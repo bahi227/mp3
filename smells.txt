@@ -11,9 +11,9 @@ Question 2
 Question 3 
 	Does this new updateAndTrim method belong to Nodes class?
 	Depends on how it was fixed, but since it only calls two functions associated with 
-		the class, it doesn't have to be
-	Code smell - speculative generality? or possibly non-localized as it is a function 
-		thats basically only called in one class but doesn't belong to it
+		a different class, it doesn't have to be and probably shouldn't be
+	Code smell - non-localized as it is a function that has effects in a different
+		class than the one its called in
 
 Question 4
 
