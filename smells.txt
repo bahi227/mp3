@@ -29,5 +29,27 @@ Question 5
 	Generated function generateKeyPairWithSpec() for repeated lines
 
 Question 6
+	PMD detected one such code smell copied below
+	<duplication lines="13" tokens="100">
+      <file column="37" endcolumn="101" endline="141" line="129"
+            path="/home/bahi227/Documents/mp3/mp3/jenkins/test/src/test/java/hudson/model/RunParameterDefinitionTest.java"/>
+      <file column="40" endcolumn="101" endline="255" line="243"
+            path="/home/bahi227/Documents/mp3/mp3/jenkins/test/src/test/java/hudson/model/RunParameterDefinitionTest.java"/>
+      <codefragment><![CDATA[        FreeStyleBuild abortedBuild = project.scheduleBuild2(0).get();
+
+        FreeStyleProject paramProject = j.createFreeStyleProject("paramProject");
+        ParametersDefinitionProperty pdp = 
+                new ParametersDefinitionProperty(new RunParameterDefinition("RUN", 
+                                                                             project.getName(),
+                                                                             "run description",
+                                                                             RunParameterFilter.ALL));
+        paramProject.addProperty(pdp);
+
+        FreeStyleBuild build = paramProject.scheduleBuild2(0).get();
+        assertEquals(Integer.toString(project.getLastBuild().getNumber()),
+                     build.getEnvironment(new LogTaskListener(LOGGER, Level.INFO)).get("RUN_NUMBER"));]]></codefragment>
+   </duplication>
+
+	A method was extracted from the duplicated code (from FreeStyleProject paramProject to the end of the assertEquals), to avoid duplicated code
 
 

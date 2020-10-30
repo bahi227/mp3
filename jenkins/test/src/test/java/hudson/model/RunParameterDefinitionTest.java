@@ -32,7 +32,9 @@ import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.util.LogTaskListener;
 
+import java.io.IOException;
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -128,17 +130,7 @@ public class RunParameterDefinitionTest {
         project.getPublishersList().replaceBy(Collections.singleton(new ResultPublisher(Result.ABORTED)));
         FreeStyleBuild abortedBuild = project.scheduleBuild2(0).get();
 
-        FreeStyleProject paramProject = j.createFreeStyleProject("paramProject");
-        ParametersDefinitionProperty pdp = 
-                new ParametersDefinitionProperty(new RunParameterDefinition("RUN", 
-                                                                             project.getName(),
-                                                                             "run description",
-                                                                             RunParameterFilter.ALL));
-        paramProject.addProperty(pdp);
-
-        FreeStyleBuild build = paramProject.scheduleBuild2(0).get();
-        assertEquals(Integer.toString(project.getLastBuild().getNumber()),
-                     build.getEnvironment(new LogTaskListener(LOGGER, Level.INFO)).get("RUN_NUMBER"));
+        FreeStyleBuild build = freeStyleProjectTest(project);
     }
 
     @Test
@@ -242,7 +234,17 @@ public class RunParameterDefinitionTest {
         FreeStyleProject project = j.createFreeStyleProject("project");
         FreeStyleBuild successfulBuild = project.scheduleBuild2(0).get();
 
-        FreeStyleProject paramProject = j.createFreeStyleProject("paramProject");
+        FreeStyleBuild build = freeStyleProjectTest(project);
+
+        successfulBuild.delete();
+        // We should still be able to retrieve non RunParameter environment variables for the parameterized build
+        // even when the selected RunParameter build has been deleted.
+        assertEquals("paramProject", build.getEnvironment(new LogTaskListener(LOGGER, Level.INFO)).get("JOB_NAME"));
+    }
+
+	private FreeStyleBuild freeStyleProjectTest(FreeStyleProject project)
+			throws IOException, InterruptedException, ExecutionException {
+		FreeStyleProject paramProject = j.createFreeStyleProject("paramProject");
         ParametersDefinitionProperty pdp =
                 new ParametersDefinitionProperty(new RunParameterDefinition("RUN",
                                                                              project.getName(),
@@ -253,12 +255,8 @@ public class RunParameterDefinitionTest {
         FreeStyleBuild build = paramProject.scheduleBuild2(0).get();
         assertEquals(Integer.toString(project.getLastBuild().getNumber()),
                      build.getEnvironment(new LogTaskListener(LOGGER, Level.INFO)).get("RUN_NUMBER"));
-
-        successfulBuild.delete();
-        // We should still be able to retrieve non RunParameter environment variables for the parameterized build
-        // even when the selected RunParameter build has been deleted.
-        assertEquals("paramProject", build.getEnvironment(new LogTaskListener(LOGGER, Level.INFO)).get("JOB_NAME"));
-    }
+		return build;
+	}
 
     static class ResultPublisher extends Publisher {
 
