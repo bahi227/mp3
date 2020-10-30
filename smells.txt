@@ -22,3 +22,12 @@ Question 4
 		However, the breaks stop that, as it needs to break a different loop
 		Instead, a for loop with a condition to ensure it hasn't reached any
 		of the breaks in the if statement. 
+		Also, tests added for ensuring refactoring didn't add any bugs
+
+Question 5
+	hudson.cli.Connection, repeated lines
+	Generated function generateKeyPairWithSpec() for repeated lines
+
+Question 6
+
+
