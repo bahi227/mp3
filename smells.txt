@@ -1,0 +1,19 @@
+Question 1
+	hudson.model.UpdateCenter, lines 558-568 repeated
+	This code smell is an example of a duplicated code and can be fixed by 
+		taking the duplicated code and making a new function or method
+		based on those duplicated lines
+
+Question 2
+	Jenkins.model.Nodes, jenkins.updateComputerList(); jenkins.trimLabel();
+	New method created of two lines commonly called together
+
+Question 3 
+	Does this new updateAndTrim method belong to Nodes class?
+	Depends on how it was fixed, but since it only calls two functions associated with 
+		the class, it doesn't have to be
+	Code smell - speculative generality? or possibly non-localized as it is a function 
+		thats basically only called in one class but doesn't belong to it
+
+Question 4
+
